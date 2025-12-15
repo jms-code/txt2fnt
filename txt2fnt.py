@@ -17,6 +17,9 @@ def parse_args():
     # custom text folder
     parser.add_argument("-tf", "--text-folder", dest="text_folder", default=text_folder, help=f"Specify text folder (default: {text_folder})")
 
+    # custom fnt output folder
+    parser.add_argument("-ff", "--fnt-folder", dest="fnt_folder", default=None, help="Specify custom output folder for generated .fnt and .png files (default: workspace/fnt)")
+
     return parser.parse_args()
 
 
@@ -141,8 +144,9 @@ def main():
     use_fontgen(
         char_chunk_file=char_chunk_file,
         ttf_file=ttf_file,
-        custom_fnt_output_name=custom_fnt_output_name,
         font_size=args.font_size,
+        custom_fnt_output_folder=args.fnt_folder,
+        custom_fnt_output_name=custom_fnt_output_name,
     )
 
 

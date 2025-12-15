@@ -51,6 +51,7 @@ def use_fontgen(
     char_chunk_file: str,
     ttf_file: str,
     font_size: int = 23,
+    custom_fnt_output_folder: str | None = None,
     custom_fnt_output_name: str | None = None,
 ) -> bool:
     import subprocess
@@ -61,17 +62,20 @@ def use_fontgen(
     ttf_file_name = os.path.splitext(ttf_file_basename)[0]
 
     output_fnt = ""
-    if custom_fnt_output_name:
-        output_fnt = os.path.join("workspace", "fnt", custom_fnt_output_name)
+    output_fnt_folder = ""
+    if custom_fnt_output_folder:
+        output_fnt_folder = custom_fnt_output_folder
     else:
-        output_fnt = os.path.join("workspace", "fnt", ttf_file_name)
+        output_fnt_folder = os.path.join("workspace", "fnt")
 
-    # output_fnt_full_path = os.path.abspath(output_fnt)
+    if custom_fnt_output_name:
+        output_fnt = os.path.join(output_fnt_folder, custom_fnt_output_name)
+    else:
+        output_fnt = os.path.join(output_fnt_folder, ttf_file_name)
 
     # ensure workspace/fnt folder exists
-    fnt_folder = os.path.join("workspace", "fnt")
-    if not os.path.exists(fnt_folder):
-        os.makedirs(fnt_folder)
+    if not os.path.exists(output_fnt_folder):
+        os.makedirs(output_fnt_folder)
 
     # create config json and save to temp file in workspace folder
     config = create_fontgen_config_json(
