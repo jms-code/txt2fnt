@@ -14,11 +14,17 @@ def parse_args():
     parser.add_argument("-ttf", dest="ttf", help=f"Specify TTF filename (in {ttf_folder} with/without extension name) to use for font generation")
     parser.add_argument("-o", "--output-name", dest="output_name", help="Custom output name for the .fnt file (no extension)")
     parser.add_argument("-fs", "--font-size", dest="font_size", type=int, default=23, help="Specify font size (default 23)")
+    # custom text folder
+    parser.add_argument("-tf", "--text-folder", dest="text_folder", default=text_folder, help=f"Specify text folder (default: {text_folder})")
+
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
+
+    global text_folder
+    text_folder = args.text_folder
 
     pwd = os.getcwd()
     # log present working directory
