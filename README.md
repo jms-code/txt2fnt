@@ -41,5 +41,14 @@ python test/util/read_xml_txt.py -v
 
 # txt2fnt supported arguments
 
--ttf <ttf_file_name> : Specify TTF filename (in in/ttf/ with extension name) to use for font generation
+-ttf <ttf_file_name> : Specify TTF filename (in in/ttf/ with/without extension name) to use for font generation
 -o <output_name> : Custom output name for the .fnt and .png file (no extension)
+--output-name : (Alias for -o)
+-fs <size> : Specify font size (default 23)
+--font-size : (Alias for -fs)
+
+# Example usage
+
+```bash
+python txt2fnt.py -ttf ChironHeiHK-Text-R-400.ttf -o noto_sans_cjk_regular -fs 32
+```
