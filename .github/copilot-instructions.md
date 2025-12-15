@@ -7,7 +7,7 @@ This repository is small and script-oriented. The goal is to convert text and TT
   - `source/` — code under active development; `source/util/` holds helpers like `extract_char_set.py`, `fontgen.py`, and `read_xml_txt.py`.
 
 - **Big picture / data flow**:
-   1. TTF fonts are placed in `in/ttf/`.
+   1. TTF fonts are placed in `_tools_/ttf/`.
    2. Text inputs (plain text or XML fragments) are in `in/text/`.
  3. Helper modules in `source/util` extract characters from text and produce character sets.
  4. `_tools_/fontgen` is invoked to create MSDF / bitmap font artifacts; `build_dist.py` copies `_tools_` and `config` into `dist/` for packaging.

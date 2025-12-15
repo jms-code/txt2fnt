@@ -2,12 +2,11 @@
 
 
 import os
+import shutil
 import string
 
 
-def replace_folder(path: str) -> str:
-    # return path.replace("\\", "/").replace("//", "/")
-    return path
+fontgen_folder = os.path.join("_tools_", "fontgen")
 
 
 def create_fontgen_config_json(
@@ -19,9 +18,9 @@ def create_fontgen_config_json(
 
     config = {
         "inputs": [ttf_file],
-        "output": replace_folder(output_fnt + ".fnt"),
+        "output": output_fnt + ".fnt",
         "charset": [
-            replace_folder(char_chunk_file),
+            char_chunk_file,
             # "0123456789",
             # "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
             # "abcdefghijklmnopqrstuvwxyz",
@@ -57,8 +56,7 @@ def use_fontgen(
     import subprocess
     import json
 
-    # pwd = os.getcwd()
-    fontgen_exe = os.path.join("_tools_", "fontgen", "fontgen.exe")
+    fontgen_exe = os.path.join(fontgen_folder, "fontgen.exe")
     ttf_file_basename = os.path.basename(ttf_file)
     ttf_file_name = os.path.splitext(ttf_file_basename)[0]
 
@@ -104,6 +102,19 @@ def use_fontgen(
     # run fontgen exe with config json
     print()
     print(f"⏳  Generating font: {output_fnt}.fnt using TTF: {ttf_file_basename}")
+
+    # fontgen_folder check if folder exists, if not, create folder, exit with error and ask user to add fontgen tool
+    if not os.path.exists(fontgen_folder):
+        os.makedirs(fontgen_folder)
+        print(
+            f"⚠️  fontgen folder not found at {fontgen_folder}. Please ensure the tool is present."
+        )
+        return False
+
+    # if fontgen exe not found, exit with error
+    if not os.path.exists(fontgen_exe):
+        print(f"⚠️  fontgen.exe not found at {fontgen_exe}. Please ensure the tool is present.")
+        return False
 
     print(f"fontgen_exe: {fontgen_exe}")
     print(f"config_json_path: {config_json_path}")

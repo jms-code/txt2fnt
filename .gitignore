@@ -211,6 +211,6 @@ __marimo__/
 # ignore the folder _tools_ but except the file README.md
 _tools_/
 !_tools_/README.md
-/workspace
+/workspace/char2chunk
+/workspace/fnt
 temp_fontgen_config.json
-/in/ttf

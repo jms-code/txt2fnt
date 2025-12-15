@@ -18,11 +18,9 @@ $entry = "txt2fnt.py"
 
 # Files / folders that need to be bundled as data
 # On Windows the separator is ';' (on *nix it's ':')
-$addDataArgs = @(
-    "in;in",
-    "_tools_;_tools_",
-    "workspace;workspace"
-)
+# By default no extra data is bundled. To bundle additional folders (e.g., fontgen), add entries to `$addDataArgs` or pass `--add-data` flags to PyInstaller.
+$addDataArgs = @()
+
 
 # Build an argument array so each --add-data is a separate argument
 $addDataFlags = $addDataArgs | ForEach-Object { @("--add-data", $_) } | Select-Object -ExpandProperty @{Name='Value'} -ErrorAction SilentlyContinue

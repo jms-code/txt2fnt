@@ -1,11 +1,17 @@
 import os
 import argparse
+import sys
 from source.util.extract_char_set import save_char_set, split_char_set, update_text_file, update_xml_file
 
+ttf_folder = os.path.join("_tools_", "ttf")
+
+workspace_folder = "workspace"
+char2chunkFolder = os.path.join(workspace_folder, "char2chunk")
+text_folder = os.path.join(workspace_folder, "text")
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Generate font files from text and TTF inputs")
-    parser.add_argument("-ttf", dest="ttf", help="Specify TTF filename (in in/ttf/ with/without extension name) to use for font generation")
+    parser.add_argument("-ttf", dest="ttf", help=f"Specify TTF filename (in {ttf_folder} with/without extension name) to use for font generation")
     parser.add_argument("-o", "--output-name", dest="output_name", help="Custom output name for the .fnt file (no extension)")
     parser.add_argument("-fs", "--font-size", dest="font_size", type=int, default=23, help="Specify font size (default 23)")
     return parser.parse_args()
@@ -18,16 +24,23 @@ def main():
     # log present working directory
     print("Present Working Directory:", pwd)
 
+    # create workspace/text folder if not exists
+    if not os.path.exists(text_folder):
+        os.makedirs(text_folder)
+        # ask user to add text files in the folder and exit
+        print(f"Text folder created at {text_folder}. Please add .txt or .xml files and run again.")
+        sys.exit(1)
 
+    textFolderFilesRaw = os.listdir(text_folder)
 
-    textFolder = "in/text/"
-    textFolderFilesRaw = os.listdir(textFolder)
-
+    # if no text files found, exit
+    if len(textFolderFilesRaw) == 0:
+        print(f"No text files found in the specified folder. ({text_folder}) Please add .txt or .xml files and run again.")
+        sys.exit(1)
 
     char_set = set()
-
     for file_name in textFolderFilesRaw:
-        file_path = os.path.join(textFolder, file_name)
+        file_path = os.path.join(text_folder, file_name)
         ext = os.path.splitext(file_name)[1].lower()
         if ext == '.txt':
             char_set = update_text_file(file_path, char_set)
@@ -39,7 +52,7 @@ def main():
     acceptedCount = len(accepted_chars)
     excludedCount = len(excluded_chars)
 
-    char2chunkFolder = os.path.join("workspace", "char2chunk")
+
     if not os.path.exists(char2chunkFolder):
         os.makedirs(char2chunkFolder)
     else:
@@ -61,23 +74,23 @@ def main():
     print()
     print()
     print("=== Selecting TTF File for Font Generation ===")
-    ttfFolder = "in/ttf/"
+
     # create the folder if not exists
-    if not os.path.exists(ttfFolder):
-        os.makedirs(ttfFolder)
+    if not os.path.exists(ttf_folder):
+        os.makedirs(ttf_folder)
         # ask user to add ttf files in the folder and exit
-        print(f"TTF folder created at {ttfFolder}. Please add TTF files and run again.")
-        exit(1)
+        print(f"TTF folder created at {ttf_folder}. Please add TTF files and run again.")
+        sys.exit(1)
 
     # list all ttf files in ttfFolder
-    ttfFiles = [f for f in os.listdir(ttfFolder) if f.endswith('.ttf')]
+    ttfFiles = [f for f in os.listdir(ttf_folder) if f.endswith('.ttf')]
     totalTtfFiles = len(ttfFiles)
     # log total number of ttf files found
     print("Total TTF Files Found:", totalTtfFiles)
     # if no ttf files found, exit
     if totalTtfFiles == 0:
-        print("No TTF files found in the specified folder. (in/ttf/)")
-        exit(1)
+        print(f"No TTF files found in the specified folder. ({ttf_folder}) Please add TTF files and run again.")
+        sys.exit(1)
 
     print("Available TTF Files:")
     # list all ttf files with counter
@@ -95,11 +108,11 @@ def main():
         elif candidate + ".ttf" in ttfFiles:
             selectedTtfFile = candidate + ".ttf"
         else:
-            print(f"Could not find specified TTF file '{candidate}' in in/ttf/.")
+            print(f"Could not find specified TTF file '{candidate}' in {ttf_folder}.")
             # exit if not found
-            exit(1)
+            sys.exit(1)
 
-    ttf_file = os.path.join(ttfFolder, selectedTtfFile)
+    ttf_file = os.path.join(ttf_folder, selectedTtfFile)
 
 
     print()
@@ -111,7 +124,6 @@ def main():
     print("Using Character Chunk File:", char_chunk_file)
 
     print("Using TTF File:", ttf_file)
-    # print("TTF File Full Path:", ttf_file_full_path)
 
     if custom_fnt_output_name:
         print("Custom FNT Output Name:", custom_fnt_output_name)
