@@ -1,6 +1,7 @@
 import os
 import re
 import time
+from source.util.safe_print import safe_print
 
 
 # need to pass previousSet by reference
@@ -11,7 +12,7 @@ def update_text_file(text_file:str, char_set:set[str]) -> set[str]:
 
     first_10_chars = list(char_set)[:10]
     print(f"File: {text_file}")
-    print(f"First 10 characters: {first_10_chars}")
+    safe_print("First 10 characters", first_10_chars)
     print()
 
     return char_set
@@ -25,7 +26,7 @@ def update_xml_file(xml_file:str, char_set:set[str]) -> set[str]:
 
     first_10_chars = list(char_set)[:10]
     print(f"File: {xml_file}")
-    print(f"First 10 characters: {first_10_chars}")
+    safe_print("First 10 characters", first_10_chars)
     print()
 
     return char_set
@@ -64,4 +65,4 @@ def save_char_set(char_set, output_file):
             if (i + 1) % 64 == 0:
                 file.write("\n")
 
-    print(f"Saved to {output_file}")
+    safe_print(f"Saved to {output_file}")

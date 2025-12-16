@@ -20,6 +20,9 @@ def parse_args():
     # custom fnt output folder
     parser.add_argument("-ff", "--fnt-folder", dest="fnt_folder", default=None, help="Specify custom output folder for generated .fnt and .png files (default: workspace/fnt)")
 
+    # treat xml as a simple text file (disable xml parsing)
+    parser.add_argument("-txat", "--treat-xml-as-text", dest="treat_xml_as_text", action="store_true", help="Treat XML files as plain text files (disable XML parsing)")
+
     return parser.parse_args()
 
 
@@ -54,7 +57,11 @@ def main():
         if ext == '.txt':
             char_set = update_text_file(file_path, char_set)
         elif ext == '.xml':
-            char_set = update_xml_file(file_path, char_set)
+            # treat_xml_as_text
+            if args.treat_xml_as_text:
+                char_set = update_text_file(file_path, char_set)
+            else:
+                char_set = update_xml_file(file_path, char_set)
 
     accepted_chars, excluded_chars = split_char_set(char_set)
 

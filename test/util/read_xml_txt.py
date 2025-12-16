@@ -52,6 +52,19 @@ class TestReadXmlLeftTxt(unittest.TestCase):
         """
         self.assertEqual(read_xml_texts_from_string(xml), ["lots of whitespace", "trimmed"])
 
+    def test_malformed_xml_fallback(self):
+        import tempfile, os
+        p = tempfile.TemporaryDirectory()
+        path = os.path.join(p.name, "bad.xml")
+        # unescaped & will cause a ParseError in strict XML parsers
+        with open(path, "w", encoding="utf-8") as f:
+            f.write("<root>hello & world<child>more & things</child></root>")
+
+        with open(path, "r", encoding="utf-8") as f:
+            xml_content = f.read()
+        texts = read_xml_texts_from_string(xml_content)
+        # Fallback should still extract the visible text chunks in order
+        self.assertEqual(texts, ["hello & world", "more & things"])
 
 if __name__ == "__main__":
     unittest.main()

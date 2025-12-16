@@ -4,6 +4,7 @@
 import os
 import shutil
 import string
+from source.util.safe_print import safe_print
 
 
 fontgen_folder = os.path.join("_tools_", "fontgen")
@@ -99,29 +100,25 @@ def use_fontgen(
         foundOriAndDelete = True
 
     if foundOriAndDelete:
-        print(
-            f"🚮  Deleted existing output files for clean generation. ({output_fnt}.fnt and {output_fnt}.png)"
-        )
+        safe_print(f"🚮  Deleted existing output files for clean generation. ({output_fnt}.fnt and {output_fnt}.png)")
 
     # run fontgen exe with config json
     print()
-    print(f"⏳  Generating font: {output_fnt}.fnt using TTF: {ttf_file_basename}")
+    safe_print(f"⏳  Generating font: {output_fnt}.fnt using TTF: {ttf_file_basename}")
 
     # fontgen_folder check if folder exists, if not, create folder, exit with error and ask user to add fontgen tool
     if not os.path.exists(fontgen_folder):
         os.makedirs(fontgen_folder)
-        print(
-            f"⚠️  fontgen folder not found at {fontgen_folder}. Please ensure the tool is present."
-        )
+        safe_print(f"⚠️  fontgen folder not found at {fontgen_folder}. Please ensure the tool is present.")
         return False
 
     # if fontgen exe not found, exit with error
     if not os.path.exists(fontgen_exe):
-        print(f"⚠️  fontgen.exe not found at {fontgen_exe}. Please ensure the tool is present.")
+        safe_print(f"⚠️  fontgen.exe not found at {fontgen_exe}. Please ensure the tool is present.")
         return False
 
-    print(f"fontgen_exe: {fontgen_exe}")
-    print(f"config_json_path: {config_json_path}")
+    safe_print(f"fontgen_exe: {fontgen_exe}")
+    safe_print(f"config_json_path: {config_json_path}")
     result = subprocess.run(
         [
             ".\\" + fontgen_exe,
@@ -132,13 +129,13 @@ def use_fontgen(
         capture_output=True,
         text=True,
     )
-    print(result.stdout)
-    print(result.stderr)
+    safe_print(result.stdout)
+    safe_print(result.stderr)
 
     # check if output fnt file is created
     if os.path.exists(output_fnt + ".fnt"):
-        print("✅  Font generation completed. Please check the workspace/fnt/ folder.")
+        safe_print("✅  Font generation completed. Please check the workspace/fnt/ folder.")
         return True
     else:
-        print("⚠️  Font generation failed.")
+        safe_print("⚠️  Font generation failed.")
         return False
